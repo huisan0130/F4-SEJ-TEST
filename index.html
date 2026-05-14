@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>F4 SEJ 实力测试</title>
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --panel: #171717;
+      --panel-2: #202020;
+      --text: #fff7ed;
+      --muted: #a8a29e;
+      --orange: #f97316;
+      --yellow: #facc15;
+      --red: #ef4444;
+      --green: #22c55e;
+      --border: rgba(249, 115, 22, 0.32);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(249, 115, 22, 0.16), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(250, 204, 21, 0.12), transparent 24%),
+        linear-gradient(135deg, #090909 0%, #17120b 52%, #101010 100%);
+      color: var(--text);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(100%, 560px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 16px;
+      display: grid;
+      place-items: center;
+    }
+
+    .card {
+      width: 100%;
+      background: rgba(18, 18, 18, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      padding: clamp(22px, 5vw, 36px);
+    }
+
+    .eyebrow {
+      color: var(--yellow);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 12vw, 4.6rem);
+      line-height: 0.95;
+      margin-bottom: 12px;
+    }
+
+    .brand {
+      color: var(--orange);
+      display: block;
+    }
+
+    .lead {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    label {
+      display: block;
+      color: var(--yellow);
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 100%;
+      border: 2px solid #343434;
+      border-radius: 8px;
+      background: #111;
+      color: var(--text);
+      padding: 15px 16px;
+      outline: 0;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.16);
+    }
+
+    .primary-btn,
+    .option-btn,
+    .secondary-link {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform 150ms ease, background 150ms ease, border-color 150ms ease;
+    }
+
+    .primary-btn {
+      margin-top: 18px;
+      background: linear-gradient(135deg, var(--orange), var(--yellow));
+      color: #111;
+      box-shadow: 0 14px 28px rgba(249, 115, 22, 0.24);
+    }
+
+    .primary-btn:hover,
+    .option-btn:hover,
+    .secondary-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .screen {
+      width: 100%;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .progress-text {
+      color: var(--orange);
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #2b2b2b;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+      transition: width 220ms ease;
+    }
+
+    .question {
+      font-size: clamp(1.22rem, 5vw, 1.7rem);
+      line-height: 1.35;
+      margin-bottom: 24px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-btn {
+      border: 1px solid #343434;
+      background: var(--panel-2);
+      color: var(--text);
+      text-align: left;
+      line-height: 1.45;
+      padding: 15px 16px;
+    }
+
+    .option-btn:hover {
+      border-color: var(--orange);
+      background: #2a2119;
+    }
+
+    .score-ring {
+      width: 170px;
+      height: 170px;
+      margin: 8px auto 22px;
+      position: relative;
+    }
+
+    .score-ring svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .score-ring circle {
+      fill: none;
+      stroke-width: 9;
+    }
+
+    .score-base {
+      stroke: #2f2f2f;
+    }
+
+    .score-value {
+      stroke: var(--orange);
+      stroke-linecap: round;
+      stroke-dasharray: 0 314;
+      transition: stroke-dasharray 700ms ease;
+    }
+
+    .score-number {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .score-number strong {
+      display: block;
+      font-size: 3.4rem;
+      line-height: 1;
+    }
+
+    .score-number span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+
+    .result-title {
+      text-align: center;
+      font-size: clamp(1.45rem, 6vw, 2rem);
+      margin-bottom: 14px;
+    }
+
+    .result-desc,
+    .promo {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.24);
+      line-height: 1.65;
+      padding: 16px;
+    }
+
+    .result-desc {
+      color: #e7e5e4;
+      margin-bottom: 16px;
+    }
+
+    .result-desc b {
+      color: #fff;
+    }
+
+    .advice {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(249, 115, 22, 0.24);
+      color: #fdba74;
+      font-weight: 800;
+    }
+
+    .promo {
+      border-color: rgba(250, 204, 21, 0.22);
+      background: rgba(250, 204, 21, 0.08);
+      margin-bottom: 16px;
+    }
+
+    .promo h3 {
+      color: var(--yellow);
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .promo ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #f5f5f4;
+      line-height: 1.7;
+    }
+
+    .secondary-link {
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--orange), var(--yellow));
+      color: #111;
+      padding: 15px;
+      margin-top: 14px;
+    }
+
+    .status {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .status.ok {
+      color: var(--green);
+    }
+
+    .status.error {
+      color: var(--red);
+    }
+
+    .small-note {
+      color: #78716c;
+      font-size: 0.78rem;
+      text-align: center;
+      line-height: 1.5;
+      margin: 12px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section id="start-screen" class="screen">
+      <div class="card">
+        <p class="eyebrow">Form 4 Sejarah</p>
+        <h1><span class="brand">F4 SEJ</span>实力测试</h1>
+        <p class="lead">5 分钟测出你对 Form 4 SEJ 的掌握度。完成最后一题后会马上看到结果，成绩也会自动送去 Google Sheet。</p>
+
+        <label for="student-name">Type your name / 你的名字</label>
+        <input id="student-name" type="text" autocomplete="name" placeholder="输入你的名字" maxlength="80">
+
+        <button id="start-btn" class="primary-btn" type="button">GO! 开始挑战</button>
+        <p class="small-note">答题结果只用于老师跟进学习状况。</p>
+      </div>
+    </section>
+
+    <section id="quiz-screen" class="screen hidden">
+      <div class="card">
+        <div class="progress-row">
+          <div id="progress-text" class="progress-text">Question 1/13</div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <h2 id="question-text" class="question">载入中...</h2>
+        <div id="options" class="options"></div>
+      </div>
+    </section>
+
+    <section id="result-screen" class="screen hidden">
+      <div class="card">
+        <p class="eyebrow" style="text-align:center">Completed</p>
+        <div class="score-ring" aria-label="Score">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="score-base" cx="60" cy="60" r="50"></circle>
+            <circle id="score-circle" class="score-value" cx="60" cy="60" r="50"></circle>
+          </svg>
+          <div class="score-number">
+            <div>
+              <strong id="final-score">0</strong>
+              <span>SCORE</span>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="result-title" class="result-title">诊断结果</h2>
+        <div id="result-desc" class="result-desc"></div>
+
+        <div class="promo">
+          <h3>为何一定要参加《A 战役》？</h3>
+          <ul>
+            <li>10 堂课学完 10 个 Bab，不拖泥带水</li>
+            <li>只教今年考试会出的重点 Topic</li>
+            <li>一站式全包：Struktur, Esei, KBAT</li>
+            <li>10 年经验：年年都有 A+ 学生，今年是你</li>
+            <li>拒绝迷茫：让老师帮你从头复习</li>
+          </ul>
+        </div>
+
+        <a class="secondary-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf_6PYNMiS70t-dD2buPptvZgOIg43ovKcpl0VfGn_J_OvM6Q/viewform" target="_blank" rel="noopener">立刻报名《A 战役》</a>
+        <p id="save-status" class="status">正在保存成绩到 Sheet...</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxH_eBnpL8Mb813d3lKxaxP06FGM_mUuYYXAOaxUE0Fp_1WR1pU7pnmJIFbJtV8cMUQiA/exec";
+
+    const questions = [
+      {
+        q: "1. F4 BAB 1: 在 Hukum Kanun Melaka 中，针对 “Membunuh orang lain tanpa pengetahuan raja” 的惩罚体现了：",
+        options: [
+          { t: "Daulat dan kedaulatan Raja diiktiraf", s: 10 },
+          { t: "Rakyat mempunyai hak membalas dendam", s: 0 },
+          { t: "Sultan tidak berkuasa dalam undang-undang", s: 0 }
+        ]
+      },
+      {
+        q: "2. F4 BAB 2: 哪一项是导致 Nasionalisme di Filipina 从“改革要求”转变为“武装革命”的关键转折点？",
+        options: [
+          { t: "Kegagalan Gerakan Propaganda dan penahanan Jose Rizal", s: 10 },
+          { t: "Pengaruh Revolusi Keagamaan di Barat", s: 0 },
+          { t: "Sokongan Amerika Syarikat terhadap Katipunan", s: 0 }
+        ]
+      },
+      {
+        q: "3. F4 BAB 3: 为什么 Liga Bangsa (League of Nations) 无法阻止 Perang Dunia Kedua 的爆发？",
+        options: [
+          { t: "Gagal menangani krisis pencerobohan Jerman dan Itali", s: 10 },
+          { t: "Kekurangan dana daripada negara-negara Asia", s: 0 },
+          { t: "Terlalu memberi tumpuan kepada Revolusi Rusia", s: 0 }
+        ]
+      },
+      {
+        q: "4. F4 BAB 3: Pendudukan Jepun 期间推行的 “Lingkungan Kesemakmuran Asia Timur Raya” 口号，其实际目的是：",
+        options: [
+          { t: "Eksploitasi ekonomi demi kepentingan ketenteraan Jepun", s: 10 },
+          { t: "Memberi kemerdekaan penuh kepada Tanah Melayu", s: 0 },
+          { t: "Menghapuskan sistem beraja di Asia Tenggara", s: 0 }
+        ]
+      },
+      {
+        q: "5. F4 BAB 4: 马来社会坚决反对 Malayan Union 的最核心原因是：",
+        options: [
+          { t: "Kedaulatan Raja-raja Melayu dan hak istimewa terancam", s: 10 },
+          { t: "British ingin membawa masuk lebih ramai buruh asing", s: 0 },
+          { t: "Sultan-sultan tidak diberikan gaji oleh British", s: 0 }
+        ]
+      },
+      {
+        q: "6. F4 BAB 5: 与 Malayan Union 相比，PTM 1948 的哪项特征成功维护了马来主权？",
+        options: [
+          { t: "Syarat kewarganegaraan diperketatkan (bukan Jus Soli)", s: 10 },
+          { t: "Gabenor British mempunyai kuasa mutlak", s: 0 },
+          { t: "Singapura digabungkan ke dalam Tanah Melayu", s: 0 }
+        ]
+      },
+      {
+        q: "7. F4 BAB 6: Templer 将军推行的 Perang Saraf 战略，旨在通过什么方式来达成抗共目标？",
+        options: [
+          { t: "Memenangi hati rakyat untuk menyokong kerajaan", s: 10 },
+          { t: "Menggunakan bom kimia di dalam hutan", s: 0 },
+          { t: "Memperkenalkan Rancangan Briggs secara kekerasan", s: 0 }
+        ]
+      },
+      {
+        q: "8. F4 BAB 7: 1951 年设立的 Sistem Ahli 对我国独立过程最重要的贡献是：",
+        options: [
+          { t: "Melatih penduduk tempatan dalam pentadbiran kerajaan", s: 10 },
+          { t: "Menentukan tarikh kemerdekaan negara", s: 0 },
+          { t: "Menggantikan jawatan Sultan dalam negeri", s: 0 }
+        ]
+      },
+      {
+        q: "9. F4 BAB 8: 1955 年 Pilihan Raya Umum 中，Parti Perikatan 的胜利象征着：",
+        options: [
+          { t: "Permulaan kerjasama antara kaum menuju kemerdekaan", s: 10 },
+          { t: "Penghapusan pengaruh British secara total", s: 0 },
+          { t: "Penerimaan ideologi komunis dalam parlimen", s: 0 }
+        ]
+      },
+      {
+        q: "10. F4 BAB 9/10: Suruhanjaya Reid 在起草宪法草案时，必须确保平衡哪两个关键要素？",
+        options: [
+          { t: "Hak istimewa orang Melayu & kepentingan kaum lain", s: 10 },
+          { t: "Kuasa British & Kuasa Parti Komunis Malaya", s: 0 },
+          { t: "Sistem Republik & Sistem Beraja Berperlembagaan", s: 0 }
+        ]
+      },
+      {
+        q: "11. 哎哟，每次自己复习的时候，我都会陷入“不知道要复习什么”的黑洞......",
+        options: [
+          { t: "A. 同意（救命啊！）", s: 0, reason: "needs_study_buddy" },
+          { t: "B. 不同意（我超稳的）", s: 0 }
+        ]
+      },
+      {
+        q: "12. 每次考试我都能提前复习，从来不后悔没早点开始！",
+        options: [
+          { t: "A. 同意（我是时间管理大师）", s: 0 },
+          { t: "B. 不同意（每次都是临时抱佛脚）", s: 0, reason: "needs_schedule" }
+        ]
+      },
+      {
+        q: "13. 我承认我有“拖延症”晚期，复习时手机比书本好看......",
+        options: [
+          { t: "A. 同意（被你看穿了）", s: 0, reason: "needs_discipline" },
+          { t: "B. 不同意（我超专注）", s: 0 }
+        ]
+      }
+    ];
+
+    const state = {
+      currentIndex: 0,
+      score: 0,
+      studentName: "",
+      reasons: [],
+      answers: []
+    };
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      quiz: document.getElementById("quiz-screen"),
+      result: document.getElementById("result-screen")
+    };
+
+    const reasonLabels = {
+      needs_study_buddy: "需要督促/迷茫",
+      needs_schedule: "临时抱佛脚",
+      needs_discipline: "手机重度拖延症"
+    };
+
+    document.getElementById("start-btn").addEventListener("click", startQuiz);
+    document.getElementById("student-name").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") startQuiz();
+    });
+
+    function startQuiz() {
+      const input = document.getElementById("student-name");
+      const name = input.value.trim();
+
+      if (!name) {
+        input.placeholder = "请先输入名字哦";
+        input.style.borderColor = "var(--red)";
+        input.focus();
+        return;
+      }
+
+      state.studentName = name;
+      showScreen("quiz");
+      renderQuestion();
+    }
+
+    function showScreen(screenName) {
+      Object.values(screens).forEach((screen) => screen.classList.add("hidden"));
+      screens[screenName].classList.remove("hidden");
+    }
+
+    function renderQuestion() {
+      const question = questions[state.currentIndex];
+      const progress = ((state.currentIndex + 1) / questions.length) * 100;
+      document.getElementById("progress-text").textContent = `Question ${state.currentIndex + 1}/${questions.length}`;
+      document.getElementById("progress-bar").style.width = `${progress}%`;
+      document.getElementById("question-text").textContent = question.q;
+
+      const options = document.getElementById("options");
+      options.innerHTML = "";
+
+      question.options.forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option-btn";
+        button.textContent = option.t;
+        button.addEventListener("click", () => selectOption(option));
+        options.appendChild(button);
+      });
+    }
+
+    function selectOption(option) {
+      const question = questions[state.currentIndex];
+      state.score += option.s;
+      if (option.reason) state.reasons.push(option.reason);
+
+      state.answers.push({
+        question: question.q,
+        answer: option.t,
+        score: option.s,
+        reason: option.reason || ""
+      });
+
+      state.currentIndex += 1;
+      if (state.currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      const result = buildResult();
+      showScreen("result");
+
+      document.getElementById("final-score").textContent = state.score;
+      document.getElementById("score-circle").style.strokeDasharray = `${(state.score / 100) * 314} 314`;
+      document.getElementById("result-title").textContent = result.title;
+      document.getElementById("result-desc").innerHTML = result.description;
+
+      saveResult(result);
+    }
+
+    function buildResult() {
+      let title = "";
+      let description = "";
+
+      if (state.score >= 80) {
+        title = "SEJ 学霸本霸！";
+        description = `<p>哇！<b>${escapeHtml(state.studentName)}</b>，你真的很稳！这基础已经吊打很多人了。</p><p>但在 SPM，如何把 KBAT 拿满分才是关键！</p>`;
+      } else if (state.score >= 50) {
+        title = "潜力股，再推一把就 A 了！";
+        description = `<p><b>${escapeHtml(state.studentName)}</b>，你有一定的基础，但有些考点开始模糊了，很容易在选择题丢分。</p>`;
+      } else {
+        title = "紧急救援状态！";
+        description = `<p><b>${escapeHtml(state.studentName)}</b>，你的 SEJ 情况有点危险哦！剩下的时间如果不抓重点，很难突围。</p>`;
+      }
+
+      const diagnosis = getDiagnosisText();
+      if (diagnosis !== "无明显症状") {
+        description += `<div class="advice">建议：${diagnosis}。老师可以帮你定重点、定时间、定复习节奏。</div>`;
+      }
+
+      return { title, description, diagnosis };
+    }
+
+    function getDiagnosisText() {
+      if (state.reasons.length === 0) return "无明显症状";
+      return [...new Set(state.reasons)].map((reason) => reasonLabels[reason]).join(", ");
+    }
+
+    async function saveResult(result) {
+      const status = document.getElementById("save-status");
+      const scriptUrlReady = GOOGLE_SCRIPT_URL.startsWith("https://script.google.com/macros/s/");
+
+      if (!scriptUrlReady) {
+        status.textContent = "还没连接 Sheet：请先把 Apps Script Web App URL 填入 index.html。";
+        status.className = "status error";
+        return;
+      }
+
+      const payload = {
+        timestamp: new Date().toISOString(),
+        name: state.studentName,
+        score: state.score,
+        result: result.title,
+        diagnosis: result.diagnosis,
+        answers: state.answers,
+        source: window.location.href,
+        userAgent: navigator.userAgent
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          keepalive: true,
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        status.textContent = "成绩已送出到 Sheet。";
+        status.className = "status ok";
+      } catch (error) {
+        status.textContent = "成绩暂时送不出去，请检查 Apps Script 部署 URL。";
+        status.className = "status error";
+        console.error(error);
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
